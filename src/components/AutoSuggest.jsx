@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { URL } from "../constants/constants";
 import { debounce } from "../utils/debounce";
 
@@ -13,6 +14,7 @@ export default function AutoSuggest() {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef();
   const autCompleteRef = useRef();
+  const history = useHistory();
 
   const handleClickOutside = (e) => {
     if (autCompleteRef.current.contains(e.target)) {
@@ -83,8 +85,7 @@ export default function AutoSuggest() {
 
     // enter
     if (e.keyCode === 13) {
-      setSearchInput(suggestions[selectedSuggestionIndex].name);
-      setSearchTerm(suggestions[selectedSuggestionIndex].name);
+      history.push(`/users/${suggestions[selectedSuggestionIndex].id}`);
     }
 
     // esc
@@ -124,8 +125,9 @@ export default function AutoSuggest() {
                 setSelectedSuggestionIndex(index);
               }}
               onClick={() => {
-                setSearchInput(suggestion.name);
-                setSearchTerm(suggestion.name);
+                history.push(
+                  `/users/${suggestions[selectedSuggestionIndex].id}`
+                );
               }}
               style={{
                 backgroundColor:
