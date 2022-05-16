@@ -6,6 +6,8 @@ import { URL } from "../constants/constants";
 
 export default function UserInfo() {
   const [userData, setUserData] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const params = useParams();
   useEffect(() => {
     axios
@@ -14,9 +16,21 @@ export default function UserInfo() {
         setUserData(res.data);
       })
       .catch((err) => {
-        setUserData(err);
+        console.error(err);
+        setError(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <>

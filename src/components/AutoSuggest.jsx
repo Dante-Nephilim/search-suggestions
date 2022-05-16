@@ -10,14 +10,14 @@ export default function AutoSuggest() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState();
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef();
   const autCompleteRef = useRef();
   const history = useHistory();
 
   const handleClickOutside = (e) => {
-    if (autCompleteRef.current.contains(e.target)) {
+    if (autCompleteRef.current?.contains(e.target)) {
       return;
     }
     setIsFocused(false);
@@ -35,7 +35,7 @@ export default function AutoSuggest() {
     inputRef.current.focus();
     setSelectedSuggestionIndex(-1);
     setSuggestions(undefined);
-    setIsError(false);
+    setError(undefined);
     if (searchTerm.length > 0) {
       fetchUserList();
     } else {
@@ -56,14 +56,13 @@ export default function AutoSuggest() {
       .get(`${URL}/users?name_like=${searchTerm}`)
       .then((res) => {
         setSuggestions(res.data);
-        setIsError(false);
         if (res.data.length > 0) {
           setSelectedSuggestionIndex(0);
         }
       })
       .catch((err) => {
         console.error(err);
-        setIsError(true);
+        setError(err.message);
       })
       .finally(() => {
         setIsLoading(false);
@@ -141,7 +140,7 @@ export default function AutoSuggest() {
           ))}
         {isLoading && <div>Loading...</div>}
         {suggestions && suggestions.length === 0 && <div>No results found</div>}
-        {isError && <div>Error</div>}
+        {error && <div>{error}</div>}
       </div>
     </div>
   );
