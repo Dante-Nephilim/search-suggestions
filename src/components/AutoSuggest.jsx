@@ -1,9 +1,11 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { URL } from "../constants/constants";
+import { debounce } from "../utils/debounce";
 
 export default function AutoSuggest() {
   const [suggestions, setSuggestions] = useState();
+  const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +40,13 @@ export default function AutoSuggest() {
       setSuggestions(undefined);
     }
   }, [searchTerm]);
+
+  const handleChange = useCallback(
+    debounce((input) => {
+      setSearchTerm(input);
+    }, 400),
+    []
+  );
 
   const fetchUserList = () => {
     setIsLoading(true);
@@ -74,6 +83,7 @@ export default function AutoSuggest() {
 
     // enter
     if (e.keyCode === 13) {
+      setSearchInput(suggestions[selectedSuggestionIndex].name);
       setSearchTerm(suggestions[selectedSuggestionIndex].name);
     }
 
@@ -91,9 +101,10 @@ export default function AutoSuggest() {
         name="name"
         id="name"
         type="text"
-        value={searchTerm}
+        value={searchInput}
         onChange={(e) => {
-          setSearchTerm(e.target.value);
+          setSearchInput(e.target.value);
+          handleChange(e.target.value);
         }}
         onKeyDown={handleKeyDown}
         onFocus={() => {
@@ -113,6 +124,7 @@ export default function AutoSuggest() {
                 setSelectedSuggestionIndex(index);
               }}
               onClick={() => {
+                setSearchInput(suggestion.name);
                 setSearchTerm(suggestion.name);
               }}
               style={{
