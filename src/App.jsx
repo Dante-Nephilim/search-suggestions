@@ -9,6 +9,15 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <div className="mt-14 text-lg hover:text-blue-700 hover:underline">
+          <a
+            href="https://github.com/Dante-Nephilim/search-suggestions"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub Link
+          </a>
+        </div>
         <Suspense fallback={<div>Loading...</div>}>
           <Switch>
             <Route exact path="/" component={AutoSuggest} />
