@@ -11,7 +11,7 @@ function App() {
       <div className="App">
         <div className="mt-14 text-lg hover:text-blue-700 hover:underline">
           <a
-            href="https://github.com/Dante-Nephilim"
+            href="https://github.com/Dante-Nephilim/search-suggestions"
             target="_blank"
             rel="noopener noreferrer"
           >
