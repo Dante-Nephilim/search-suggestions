@@ -100,7 +100,7 @@ export default function AutoSuggest() {
   return (
     <div
       ref={autCompleteRef}
-      className="mt-32 flex flex-col items-stretch mx-auto max-w-md "
+      className="mx-auto mt-32 flex max-w-md flex-col items-stretch "
     >
       <TextField
         label="User Search"
@@ -126,6 +126,7 @@ export default function AutoSuggest() {
         }}
         inputRef={inputRef}
         autoComplete="off"
+        placeholder="Search for a user..."
       />
       <div className=" pt-3">
         {isFocused &&
@@ -133,7 +134,7 @@ export default function AutoSuggest() {
           suggestions.length > 0 &&
           suggestions.map((suggestion, index) => (
             <div
-              className={`p-2 ${
+              className={`cursor-pointer p-2 ${
                 index === selectedSuggestionIndex ? "bg-gray-200" : ""
               } transition-colors`}
               key={suggestion.id}
