@@ -3,6 +3,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { URL } from "../constants/constants";
 import { debounce } from "../utils/debounce";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
 export default function AutoSuggest() {
   const [suggestions, setSuggestions] = useState();
@@ -95,12 +98,23 @@ export default function AutoSuggest() {
   };
 
   return (
-    <div ref={autCompleteRef}>
-      <label htmlFor="name">Name</label>
-      <input
+    <div
+      ref={autCompleteRef}
+      className="mt-32 flex flex-col items-stretch mx-auto max-w-md "
+    >
+      <TextField
+        label="User Search"
+        variant="outlined"
         name="name"
         id="name"
         type="text"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchOutlinedIcon />
+            </InputAdornment>
+          ),
+        }}
         value={searchInput}
         onChange={(e) => {
           setSearchInput(e.target.value);
@@ -110,15 +124,18 @@ export default function AutoSuggest() {
         onFocus={() => {
           setIsFocused(true);
         }}
-        ref={inputRef}
+        inputRef={inputRef}
         autoComplete="off"
       />
-      <div>
+      <div className=" pt-3">
         {isFocused &&
           suggestions &&
           suggestions.length > 0 &&
           suggestions.map((suggestion, index) => (
             <div
+              className={`p-2 ${
+                index === selectedSuggestionIndex ? "bg-gray-200" : ""
+              } transition-colors`}
               key={suggestion.id}
               onMouseEnter={() => {
                 setSelectedSuggestionIndex(index);
@@ -127,12 +144,6 @@ export default function AutoSuggest() {
                 history.push(
                   `/users/${suggestions[selectedSuggestionIndex].id}`
                 );
-              }}
-              style={{
-                backgroundColor:
-                  index === selectedSuggestionIndex
-                    ? "hsl(120, 50%, 80%)"
-                    : "transparent",
               }}
             >
               {suggestion.name}

@@ -8,7 +8,7 @@ const UserInfo = lazy(() => import("./pages/UserInfo"));
 function App() {
   return (
     <Router>
-      <div className="App mt-5">
+      <div className="App">
         <Suspense fallback={<div>Loading...</div>}>
           <Switch>
             <Route exact path="/" component={AutoSuggest} />
